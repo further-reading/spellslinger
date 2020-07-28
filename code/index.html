@@ -10,50 +10,60 @@
         <h1>Enter Stats</h1>
         <form>
             <label for="gnosis">Gnosis Rating:</label>
-            <input type="number" id="gnosis" name="gnosis" value="0" min="0">
+            <input type="number" id="gnosis" name="gnosis" class="pool" value="1" min="1">
             <label for="arcana">Primary Arcana Rating:</label>
-            <input type="number" id="arcana" name="arcana" value="0" min="0">
+            <input type="number" id="arcana" name="arcana" class="pool factor" value="1" min="1" max="5">
+            <p>Base Pool: <strong class="base">0</strong></p>
         </form>
     </section>
     <section>
-        <h1>Enter Spell Details</h1>
-        <form>
-            <label for="sname">Name:</label>
-            <input type="text" id="sname" name="sname">
-            <label for="pfactor">Primary Factor:</label>
-            <input type="text" id="pfactor" name="pfactor">
-            <p class="sdetails error"></p>
-        </form>
+        <h1>Spell Details</h1>
+        <label for="level">Spell Level:</label>
+        <input type="number" id="level" name="level" value="1" min="1" max="5">
+        <label for="rote">Rote:</label>
+        <input type="checkbox" id="rote" name="rote">
+        <label for="pfactor">Primary Factor:</label>
+            <select id="pfactor" name="pfactor" class="factor">
+                <option value="potency">Potency</option>
+                <option value="duration">Duration</option>
+                <option value="scale">Scale</option>
+            </select>
     </section>
     <section>
         <h1>Choose Reach</h1>
         <form>
-            <label for="rname1">Name:</label>
-            <input type="text" id="rname1" name="rname1">
-            <label for="rvalue1">Value:</label>
-            <input type="text" id="rvalue1" name="rvalue1">
-            <!-- Button To add new yantra -->
-            <p class="reach error"></p>
+            <label for="actime">Advanced Casting Time:</label>
+            <input type="checkbox" id="actime" name="actime">
+            <label for="arange">Advanced Range:</label>
+            <input type="checkbox" id="arange" name="arange">
+            <label for="apotency">Advanced Potency:</label>
+            <input type="checkbox" id="apotency" name="apotency">
+            <label for="ascale">Advanced Scale</label>
+            <input type="checkbox" id="ascale" name="ascale">
+            <label for="aduration">Advanced Duration:</label>
+            <input type="checkbox" id="aduration" name="aduration">
+            <button type="button" id="add_reach">Add Reach</button>
         </form>
     </section>
     <section>
-        <h1>Choose Spell Factors</h1>
+        <h1>Spell Factors</h1>
         <form>
             <label for="cast_time">Casting Time:</label>
-            <input type="text" id="cast_time" name="cast_time">
+            <input type="text" id="cast_time" name="cast_time" value="3 Hours" readonly>
 
             <label for="range">Range:</label>
-            <input type="text" id="range" name="range" value="Self/Touch">
+            <input type="text" id="range" name="range" value="Self/Touch" readonly>
 
             <label for="potency">Potency:</label>
-            <input type="text" id="potency" name="potency">
+            <input type="number" id="potency" name="potency" min="0">
 
             <label for="duration">Duration:</label>
-            <input type="text" id="duration" name="duration">
+            <select id="duration" name="duration" class="penalty">
+            </select>
 
             <label for="scale">Scale:</label>
-            <input type="text" id="scale" name="scale">
-            <p class="factor error"></p>
+            <select id="scale" name="scale" class="penalty">
+            </select>
         </form>
     </section>
     <section>
@@ -70,7 +80,8 @@
     <section>
         <h1>Pool</h1>
         <table>
-            <tr><td>Base:</td><td id="base"></td></tr>
+            <tr><td>Base:</td><td class="base"></td></tr>
+            <tr><td>Total:</td><td id="total"></td></tr>
         </table>
     </section>
 </body>
