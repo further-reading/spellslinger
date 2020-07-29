@@ -1,6 +1,7 @@
 let gnosis_elm;
 let arcana_elm;
 let level_elm;
+let potency_elm;
 
 let base_duration = [
     '1 turn',
@@ -23,6 +24,7 @@ function init() {
     gnosis_elm = document.querySelector('#gnosis');
     arcana_elm = document.querySelector('#arcana');
     level_elm = document.querySelector('#level');
+    potency_elm = document.querySelector('#potency');
 
     document.querySelectorAll('.factor').forEach(
         item => {item.addEventListener('change', update_factors);}
@@ -31,6 +33,7 @@ function init() {
     document.querySelectorAll('.pool, .bonus, .penalty').forEach(
         item => {item.addEventListener('change', calc_pool);}
     )
+    potency_elm.addEventListener('change', calc_pool)
     update_factors()
     calc_pool()
 
@@ -42,21 +45,9 @@ function calc_pool(event){
     let pool = gnosis + arcana;
     document.querySelectorAll('.base').forEach(item => {item.innerText=pool})
 
-    let penalties = 0
-    for (let item of document.querySelectorAll('.penalty')){
-        if (item.value){
-            penalties += Number(item.value)
-        }
-    }
-    document.querySelectorAll('.total.penalty').forEach(item => {item.innerText=penalties})
+    let penalties = calc_penalties(arcana)
+    let bonuses = calc_bonuses()
 
-    let bonuses = 0
-    for (let item of document.querySelectorAll('.bonus')){
-        if (item.value){
-            bonuses += Number(item.value)
-        }
-    }
-    document.querySelectorAll('.total.bonus').forEach(item => {item.innerText=bonuses})
     let total = pool + bonuses - penalties
     if (total <= 0){
         total = 'CHANCE'
@@ -65,6 +56,35 @@ function calc_pool(event){
     total_elm.innerText = total
 }
 
+function calc_penalties(arcana){
+    let penalties = 0
+    for (let item of document.querySelectorAll('.penalty')){
+        if (item.value){
+            penalties += Number(item.value)
+        }
+    }
+    let potency = Number(potency_elm.value)
+    console.log(potency)
+    if (document.querySelector('#pfactor').value === 'potency') {
+        // min value of potency if primary factor
+        potency -= arcana
+    }
+    // 1 potency costs 2 dice
+    penalties += potency * 2
+    document.querySelectorAll('.total.penalty').forEach(item => {item.innerText=penalties})
+    return penalties
+}
+
+function calc_bonuses(){
+    let bonuses = 0
+    for (let item of document.querySelectorAll('.bonus')){
+        if (item.value){
+            bonuses += Number(item.value)
+        }
+    }
+    document.querySelectorAll('.total.bonus').forEach(item => {item.innerText=bonuses})
+    return bonuses
+}
 function update_factors(event){
     let pfactor = document.querySelector('#pfactor').value
     let arcana = Number(arcana_elm.value)
