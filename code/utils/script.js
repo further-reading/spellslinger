@@ -8,14 +8,45 @@ let base_duration = [
     '2 turns',
     '3 turns',
     '5 turns',
-    '10 turns'
+    '10 turns',
 ]
+
+let advanced_duration = [
+    'One scene/hour',
+    'One Day',
+    'One Week',
+    'One Month',
+    'One Year',
+    'Indefinite (requires an additional Reach and 1 Mana)'
+]
+
 let base_scale = [
     '1 subject/Largest Size 5/Arm\'s reach',
     '2 subjects/Largest Size 6/A small room',
     '4 subjects/Largest Size 7/A large room',
     '8 Subjects/Largest Size 8/Several rooms or a single floor of a house',
     '16 subjects/Largest Size 9/Ballroom or small house'
+]
+
+let advanced_scale = [
+    '5 subjects/Largest Size 5/A large house or building',
+    '10 subjects/Largest Size 10/A small warehouse or parking lot',
+    '20 subjects/Largest Size 15/A large warehouse or supermarket',
+    '40 subjects/Largest Size 20/A small factor or shopping mall',
+    '80 subjects/Largest Size 30/A campus or a small neighbourhood',
+]
+
+let cast_time = [
+    '3 Hours',
+    '3 Hours',
+    '1 Hour',
+    '1 Hour',
+    '30 Minutes',
+    '30 Minutes',
+    '10 Minutes',
+    '10 Minutes',
+    '1 Minute/20 Turns',
+    '1 Minute/20 Turns'
 ]
 
 document.addEventListener('DOMContentLoaded', init, false);
@@ -89,10 +120,73 @@ function update_factors(event){
     let pfactor = document.querySelector('#pfactor').value
     let arcana = Number(arcana_elm.value)
 
+    update_potency_factor(pfactor, arcana)
+    update_ctime_factor()
+    update_range_factor()
+    update_duration_factor(pfactor, arcana)
+    update_scale_factor(pfactor, arcana)
+}
+
+function update_ctime_factor (){
+    let content
+    if (document.querySelector('#actime').checked){
+        content = "Instant"
+    }
+    else{
+        content = get_ritual_time()
+    }
+    document.querySelector('#cast_time').value = content
+}
+
+function update_range_factor (){
+    let content
+    if (document.querySelector('#arange').checked){
+        content = "Sensory"
+    }
+    else{
+        content = "Self/Touch"
+    }
+    document.querySelector('#range').value = content
+}
+
+function update_potency_factor (pfactor, arcana){
+    let potency_select = document.querySelector('#potency')
+    if (pfactor === 'potency'){
+        potency_select.min = arcana
+    }
+    else{
+        potency_select.min = 1
+    }
+    potency_select.value = potency_select.min
+}
+
+function update_duration_factor (pfactor, arcana){
+    let duration = base_duration
+    if (document.querySelector('#aduration').checked){
+        duration = advanced_duration
+    }
+
+    let start = 0
+    if (pfactor === 'duration'){
+        start = arcana - 1
+    }
+    let duration_select = document.querySelector('#duration')
+    duration_select.innerHTML = ''
+    for (let index = start; index < duration.length; index++){
+        let value = index * 2
+        let option = document.createElement('option')
+
+        option.value = value.toString()
+        option.innerText = duration[index]
+        duration_select.appendChild(option)
+    }
+}
+
+function update_scale_factor(pfactor, arcana){
     // scale
     let scale = base_scale
     if (document.querySelector('#ascale').checked){
-        console.log('NYI')
+        scale = advanced_scale
     }
     let start = 0
     if (pfactor === 'scale'){
@@ -108,35 +202,9 @@ function update_factors(event){
         option.innerText = scale[index]
         scale_select.appendChild(option)
     }
+}
 
-    // duration
-    let duration = base_duration
-    if (document.querySelector('#aduration').checked){
-        console.log('NYI')
-    }
-
-    start = 0
-    if (pfactor === 'duration'){
-        start = arcana - 1
-    }
-    let duration_select = document.querySelector('#duration')
-    duration_select.innerHTML = ''
-    for (let index = start; index < duration.length; index++){
-        let value = index * 2
-        let option = document.createElement('option')
-
-        option.value = value.toString()
-        option.innerText = duration[index]
-        duration_select.appendChild(option)
-    }
-
-    // potency
-    let potency_select = document.querySelector('#potency')
-    if (pfactor === 'potency'){
-        potency_select.min = arcana
-    }
-    else{
-        potency_select.min = 1
-    }
-    potency_select.value = potency_select.min
+function get_ritual_time(){
+    let gnosis = Number(gnosis_elm.value)
+    return cast_time[gnosis - 1]
 }

@@ -10,10 +10,10 @@
         <h1>Enter Stats</h1>
         <form>
             <label for="gnosis">Gnosis Rating:</label>
-            <input type="number" id="gnosis" name="gnosis" class="pool" value="1" min="1">
+            <input type="number" id="gnosis" name="gnosis" class="pool factor" value="1" min="1"  max="10">
             <label for="arcana">Primary Arcana Rating:</label>
             <input type="number" id="arcana" name="arcana" class="pool factor" value="1" min="1" max="5">
-            <p>Base Pool: <strong class="base">0</strong></p>
+            <p>Base Pool: <strong class="base">2</strong></p>
         </form>
     </section>
     <section>
@@ -23,25 +23,27 @@
         <label for="rote">Rote:</label>
         <input type="checkbox" id="rote" name="rote">
         <label for="pfactor">Primary Factor:</label>
-            <select id="pfactor" name="pfactor" class="factor">
-                <option value="potency">Potency</option>
-                <option value="duration">Duration</option>
-                <option value="scale">Scale</option>
-            </select>
+        <select id="pfactor" name="pfactor" class="factor">
+            <option value="potency">Potency</option>
+            <option value="duration">Duration</option>
+            <option value="scale">Scale</option>
+        </select>
+        <label for="path">In Path?</label>
+        <input type="checkbox" id="path" name="path">
     </section>
     <section>
         <h1>Choose Reach</h1>
         <form>
             <label for="actime">Advanced Casting Time:</label>
-            <input type="checkbox" id="actime" name="actime">
+            <input type="checkbox" id="actime" name="actime" class="factor">
             <label for="arange">Advanced Range:</label>
-            <input type="checkbox" id="arange" name="arange">
+            <input type="checkbox" id="arange" name="arange" class="factor">
             <label for="apotency">Advanced Potency:</label>
-            <input type="checkbox" id="apotency" name="apotency">
+            <input type="checkbox" id="apotency" name="apotency" class="factor">
             <label for="ascale">Advanced Scale</label>
-            <input type="checkbox" id="ascale" name="ascale">
+            <input type="checkbox" id="ascale" name="ascale" class="factor">
             <label for="aduration">Advanced Duration:</label>
-            <input type="checkbox" id="aduration" name="aduration">
+            <input type="checkbox" id="aduration" name="aduration" class="factor">
             <button type="button" id="add_reach">Add Reach</button>
         </form>
     </section>
@@ -49,10 +51,10 @@
         <h1>Spell Factors</h1>
         <form>
             <label for="cast_time">Casting Time:</label>
-            <input type="text" id="cast_time" name="cast_time" value="3 Hours" readonly>
+            <input type="text" id="cast_time" name="cast_time" readonly>
 
             <label for="range">Range:</label>
-            <input type="text" id="range" name="range" value="Self/Touch" readonly>
+            <input type="text" id="range" name="range" readonly>
 
             <label for="potency">Potency:</label>
             <input type="number" id="potency" name="potency" min="0">
