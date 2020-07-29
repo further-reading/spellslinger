@@ -17,7 +17,7 @@ let advanced_duration = [
     'One Week',
     'One Month',
     'One Year',
-    'Indefinite (requires an additional Reach and 1 Mana)'
+    'Indefinite (costs 1 Reach and 1 Mana)'
 ]
 
 let base_scale = [
