@@ -57,17 +57,16 @@ function init() {
     level_elm = document.querySelector('#level');
     potency_elm = document.querySelector('#potency');
 
-    document.querySelectorAll('.factor').forEach(
-        item => {item.addEventListener('change', update_factors);}
+    document.querySelectorAll('input').forEach(
+        item => {item.addEventListener('change', update);}
         )
+    update()
 
-    document.querySelectorAll('.pool, .bonus, .penalty').forEach(
-        item => {item.addEventListener('change', calc_pool);}
-    )
-    potency_elm.addEventListener('change', calc_pool)
+}
+
+function update(){
     update_factors()
     calc_pool()
-
 }
 
 function calc_pool(event){
@@ -78,13 +77,15 @@ function calc_pool(event){
 
     let penalties = calc_penalties(arcana)
     let bonuses = calc_bonuses()
+    // calc mana
+    // calc reach
 
     let total = pool + bonuses - penalties
     if (total <= 0){
         total = 'CHANCE'
     }
-    let total_elm = document.querySelector('#total')
-    total_elm.innerText = total
+    document.querySelector('#total').innerText = total
+    document.querySelector('#total_paradox').innerText = calc_paradox()
 }
 
 function calc_penalties(arcana){
@@ -116,6 +117,7 @@ function calc_bonuses(){
     document.querySelectorAll('.total.bonus').forEach(item => {item.innerText=bonuses})
     return bonuses
 }
+
 function update_factors(event){
     let pfactor = document.querySelector('#pfactor').value
     let arcana = Number(arcana_elm.value)
@@ -207,4 +209,43 @@ function update_scale_factor(pfactor, arcana){
 function get_ritual_time(){
     let gnosis = Number(gnosis_elm.value)
     return cast_time[gnosis - 1]
+}
+
+function calc_paradox(){
+    let paradox
+    let current_reach = calc_reach()
+    let free_reach = Number(arcana_elm.value) - Number(level_elm.value) + 1
+    if (current_reach > free_reach){
+        paradox = current_reach - free_reach
+    }
+    else {
+        return 0
+    }
+
+    paradox += Number(document.querySelector('#current_paradox').value)
+    let multiplier = (Number(gnosis_elm.value) + Number(gnosis_elm.value) % 2) / 2
+
+    paradox *= multiplier
+    paradox -= document.querySelector('#mparadox').value
+    if (paradox < 1) {
+        paradox = "Chance"
+    }
+    return paradox.toString()
+
+
+}
+
+function calc_reach(){
+    let reach = document.querySelectorAll('.reach:checked').length
+    reach += document.querySelectorAll('.reach.additional').length
+
+    let selected_duration = document.querySelector('#duration option:checked').value
+    if (selected_duration === advanced_duration[advanced_duration.length -1 ]){
+        // Indefinite duration requires an extra reach
+        reach += 1
+    }
+    for (let row of document.querySelectorAll('.reach.additional')){
+        reach += row.value
+    }
+    return reach
 }

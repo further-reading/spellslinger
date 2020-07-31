@@ -14,6 +14,8 @@
             <label for="arcana">Primary Arcana Rating:</label>
             <input type="number" id="arcana" name="arcana" class="pool factor" value="1" min="1" max="5">
             <p>Base Pool: <strong class="base">2</strong></p>
+            <label for="current_paradox">Current Paradox:</label>
+            <input type="number" id="current_paradox" name="current_paradox" value="0" min="0">
         </form>
     </section>
     <section>
@@ -35,15 +37,15 @@
         <h1>Choose Reach</h1>
         <form>
             <label for="actime">Advanced Casting Time:</label>
-            <input type="checkbox" id="actime" name="actime" class="factor">
+            <input type="checkbox" id="actime" name="actime" class="factor reach">
             <label for="arange">Advanced Range:</label>
-            <input type="checkbox" id="arange" name="arange" class="factor">
+            <input type="checkbox" id="arange" name="arange" class="factor reach">
             <label for="apotency">Advanced Potency:</label>
-            <input type="checkbox" id="apotency" name="apotency" class="factor">
+            <input type="checkbox" id="apotency" name="apotency" class="factor reach">
             <label for="ascale">Advanced Scale</label>
-            <input type="checkbox" id="ascale" name="ascale" class="factor">
+            <input type="checkbox" id="ascale" name="ascale" class="factor reach">
             <label for="aduration">Advanced Duration:</label>
-            <input type="checkbox" id="aduration" name="aduration" class="factor">
+            <input type="checkbox" id="aduration" name="aduration" class="factor reach">
             <button type="button" id="add_reach">Add Reach</button>
         </form>
     </section>
@@ -80,13 +82,24 @@
         </form>
     </section>
     <section>
+        <h1>Spend Mana</h1>
+        <form>
+            <label for="mparadox">Reduce paradox:</label>
+            <input type="number" id="mparadox" name="mparadox" min="0">
+            <label for="out_path">Out of Path Arcana:</label>
+            <input type="checkbox" id="out_path" name="out_path">
+            <!-- Button To add new mana -->
+            <p class="mwarning"></p>
+        </form>
+    </section>
+    <section>
         <h1>Pool</h1>
         <table>
-            <tr><td>Base:</td><td class="base"></td></tr>
-            <tr><td>Total:</td><td id="total"></td></tr>
-            <tr><td>Reach:</td><td id="total_reach"></td></tr>
-            <tr><td>Paradox:</td><td id="total_paradox"></td></tr>
-            <tr><td>Mana:</td><td id="total_mana"></td></tr>
+            <tr><th>Base:</th><td class="base"></td></tr>
+            <tr><th>Total:</th><td id="total"></td></tr>
+            <tr><th>Reach:</th><td id="total_reach"></td></tr>
+            <tr><th>Paradox:</th><td id="total_paradox"></td></tr>
+            <tr><th>Mana:</th><td id="total_mana"></td></tr>
         </table>
         <p id="output"></p>
     </section>
