@@ -2,6 +2,7 @@ let gnosis_elm;
 let arcana_elm;
 let level_elm;
 let potency_elm;
+let add_yantra_button;
 
 let base_duration = [
     '1 turn',
@@ -56,10 +57,15 @@ function init() {
     arcana_elm = document.querySelector('#arcana');
     level_elm = document.querySelector('#level');
     potency_elm = document.querySelector('#potency');
+    add_yantra_button = document.querySelector('#add_yantra');
 
     document.querySelectorAll('input').forEach(
         item => {item.addEventListener('change', update);}
         )
+    document.querySelectorAll('.no_submit').forEach(
+        item => {item.addEventListener('submit', form_handler);}
+        )
+    add_yantra_button.onclick = add_yantra_clicked
     update()
 
 }
@@ -86,6 +92,13 @@ function calc_pool(event){
     }
     document.querySelector('#total').innerText = total
     document.querySelector('#total_paradox').innerText = calc_paradox()
+    let yantras = 0
+    for (let item of document.querySelectorAll('.yantra')){
+        if (item.value){
+            yantras += Number(item.value)
+        }
+    }
+    document.querySelector('#total_yantras').innerText = yantras
 }
 
 function calc_penalties(arcana){
@@ -96,7 +109,6 @@ function calc_penalties(arcana){
         }
     }
     let potency = Number(potency_elm.value)
-    console.log(potency)
     if (document.querySelector('#pfactor').value === 'potency') {
         // min value of potency if primary factor
         potency -= arcana
@@ -248,4 +260,66 @@ function calc_reach(){
         reach += row.value
     }
     return reach
+}
+
+function add_yantra_clicked(){
+    let warning = document.querySelector('.yantras.error');
+    warning.innerHTML = ''
+    let yantra_limit = 1 + ((Number(gnosis_elm.value) + Number(gnosis_elm.value) % 2) / 2);
+    if (document.querySelectorAll('.yantra').length < yantra_limit){
+        add_yantra_row()
+    }
+    else{
+        warning.innerHTML = 'You have reached your yantra limit for your Gnosis.'
+    }
+}
+
+function add_yantra_row(){
+    let yantras_elm = document.querySelector('form.yantras');
+    let last_yantra = document.querySelector('.yantra:last-child');
+    let number = 0
+    if (last_yantra){
+        number = '\d+'.exec(last_yantra.id) + 1
+    }
+    let new_yantra_box = document.createElement('form');
+    new_yantra_box.id = 'yantra_' + number.toString()
+
+
+    let new_yantra_label = document.createElement('input');
+    new_yantra_label.type = 'text'
+    new_yantra_label.id = new_yantra_box.id + '_text'
+    new_yantra_label.name = new_yantra_box.name + '_text'
+    new_yantra_label.value = 'Enter Yantra Name'
+    new_yantra_box.appendChild(new_yantra_label)
+
+    let new_yantra_amount = document.createElement('input');
+    new_yantra_amount.type = 'number'
+    new_yantra_amount.className = 'yantra bonus'
+    new_yantra_amount.id = new_yantra_box.id + '_amount'
+    new_yantra_amount.name = new_yantra_box.id + '_amount'
+    new_yantra_amount.min = '0'
+    new_yantra_amount.value = '0'
+    new_yantra_amount.addEventListener('change', update)
+
+    new_yantra_box.appendChild(new_yantra_amount)
+
+    let remove_button = document.createElement('button');
+    remove_button.innerHTML = 'Remove'
+
+    new_yantra_box.appendChild(remove_button)
+    yantras_elm.appendChild(new_yantra_box)
+    new_yantra_box.addEventListener('submit', remove_yantra)
+}
+
+function remove_yantra(event){
+    let warning = document.querySelector('.yantras.error');
+    warning.innerHTML = ''
+    event.preventDefault();
+    let selected = event.target
+    selected.parentNode.removeChild(selected);
+    update()
+}
+
+function form_handler(event){
+    event.preventDefault();
 }

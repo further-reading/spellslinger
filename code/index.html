@@ -72,12 +72,8 @@
     </section>
     <section>
         <h1>Choose Yantras</h1>
-        <form>
-            <label for="yname1">Name:</label>
-            <input type="text" id="yname1" name="yname1">
-            <label for="yvalue1">Value:</label>
-            <input type="text" id="yvalue1" name="yvalue1">
-            <!-- Button To add new yantra -->
+        <form class="yantras no_submit">
+            <button id="add_yantra">Add Yantra</button>
             <p class="yantras error"></p>
         </form>
     </section>
@@ -96,6 +92,7 @@
         <h1>Pool</h1>
         <table>
             <tr><th>Base:</th><td class="base"></td></tr>
+            <tr><th>Yantras:</th><td id="total_yantras"></td></tr>
             <tr><th>Total:</th><td id="total"></td></tr>
             <tr><th>Reach:</th><td id="total_reach"></td></tr>
             <tr><th>Paradox:</th><td id="total_paradox"></td></tr>
