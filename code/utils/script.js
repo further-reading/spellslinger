@@ -3,6 +3,7 @@ let arcana_elm;
 let level_elm;
 let potency_elm;
 let add_yantra_button;
+let add_reach_button;
 
 let base_duration = [
     '1 turn',
@@ -58,6 +59,7 @@ function init() {
     level_elm = document.querySelector('#level');
     potency_elm = document.querySelector('#potency');
     add_yantra_button = document.querySelector('#add_yantra');
+    add_reach_button = document.querySelector('#add_reach');
 
     document.querySelectorAll('input').forEach(
         item => {item.addEventListener('change', update);}
@@ -66,6 +68,7 @@ function init() {
         item => {item.addEventListener('submit', form_handler);}
         )
     add_yantra_button.onclick = add_yantra_clicked
+    add_reach_button.onclick = add_reach_clicked
     update()
 
 }
@@ -83,22 +86,26 @@ function calc_pool(event){
 
     let penalties = calc_penalties(arcana)
     let bonuses = calc_bonuses()
-    // calc mana
-    // calc reach
-
     let total = pool + bonuses - penalties
     if (total <= 0){
         total = 'CHANCE'
     }
     document.querySelector('#total').innerText = total
+
+    document.querySelector('#total_reach').innerText = calc_reach()
     document.querySelector('#total_paradox').innerText = calc_paradox()
-    let yantras = 0
-    for (let item of document.querySelectorAll('.yantra')){
-        if (item.value){
-            yantras += Number(item.value)
-        }
+    document.querySelector('#total_yantras').innerText = calc_yantras()
+
+    let mana_spent = calc_mana()
+    if (is_over_mana_limit(gnosis, mana_spent)){
+        document.querySelector('#total_mana').innerText = 'Invalid'
+        document.querySelector('.mwarning').innerText = 'Too much mana spent!'
     }
-    document.querySelector('#total_yantras').innerText = yantras
+    else{
+        // Check if changing css style would be better
+        document.querySelector('#total_mana').innerText = mana_spent
+        document.querySelector('.mwarning').innerText = ''
+    }
 }
 
 function calc_penalties(arcana){
@@ -262,6 +269,38 @@ function calc_reach(){
     return reach
 }
 
+function calc_yantras(){
+    let yantras = 0
+    for (let item of document.querySelectorAll('.yantra')){
+        if (item.value){
+            yantras += Number(item.value)
+        }
+    }
+    return yantras
+}
+
+function calc_mana(){
+    let mana_spent = 0
+    let mana_section = document.querySelector('#mana');
+    let mana_inputs = mana_section.querySelectorAll('input[type="number"]')
+    mana_inputs.forEach(element => mana_spent += Number(element.value))
+    if (mana_section.querySelector('#out_path').checked) {
+        mana_spent += 1
+    }
+    return mana_spent
+}
+
+function is_over_mana_limit(gnosis, mana_spent){
+    let limit = 15
+    if (gnosis <= 8){
+        limit = gnosis
+    }
+    else if (gnosis===9){
+        limit = 10
+    }
+    return mana_spent > limit
+}
+
 function add_yantra_clicked(){
     let warning = document.querySelector('.yantras.error');
     warning.innerHTML = ''
@@ -272,6 +311,10 @@ function add_yantra_clicked(){
     else{
         warning.innerHTML = 'You have reached your yantra limit for your Gnosis.'
     }
+}
+
+function add_reach_clicked(){
+
 }
 
 function add_yantra_row(){
