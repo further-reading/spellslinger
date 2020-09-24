@@ -75,6 +75,7 @@ function init() {
 
 function update(){
     update_factors()
+    update_yantra_warning()
     calc_pool()
 }
 
@@ -225,6 +226,18 @@ function update_scale_factor(pfactor, arcana){
     }
 }
 
+function update_yantra_warning(){
+    let warning = document.querySelector('.yantras.error');
+    let yantra_limit = 1 + ((Number(gnosis_elm.value) + Number(gnosis_elm.value) % 2) / 2);
+
+    if (document.querySelectorAll('input.yantra').length >= yantra_limit){
+        warning.innerHTML = 'You have reached your yantra limit for your Gnosis.'
+    }
+    else{
+        warning.innerHTML = ''
+    }
+}
+
 function get_ritual_time(){
     let gnosis = Number(gnosis_elm.value)
     return cast_time[gnosis - 1]
@@ -302,61 +315,56 @@ function is_over_mana_limit(gnosis, mana_spent){
 }
 
 function add_yantra_clicked(){
-    let warning = document.querySelector('.yantras.error');
-    warning.innerHTML = ''
     let yantra_limit = 1 + ((Number(gnosis_elm.value) + Number(gnosis_elm.value) % 2) / 2);
-    if (document.querySelectorAll('.yantra').length < yantra_limit){
-        add_yantra_row()
+    if (document.querySelectorAll('input.yantra').length < yantra_limit){
+        add_row('yantra')
     }
-    else{
-        warning.innerHTML = 'You have reached your yantra limit for your Gnosis.'
-    }
+    update()
 }
 
 function add_reach_clicked(){
 
+    // refactor add_yantra clicked to reduce wet code?
 }
 
-function add_yantra_row(){
-    let yantras_elm = document.querySelector('form.yantras');
-    let last_yantra = document.querySelector('.yantra:last-child');
+function add_row(type){
+    let form_elm = document.querySelector(`section.${type} form`);
+    let last_row = document.querySelector(`.${type}:last-child`);
     let number = 0
-    if (last_yantra){
-        number = '\d+'.exec(last_yantra.id) + 1
+    if (last_row){
+        number = '\d+'.exec(last_row.id) + 1
     }
-    let new_yantra_box = document.createElement('form');
-    new_yantra_box.id = 'yantra_' + number.toString()
+    let new_row_box = document.createElement('form');
+    new_row_box.id = `${type}_${number}`
 
 
-    let new_yantra_label = document.createElement('input');
-    new_yantra_label.type = 'text'
-    new_yantra_label.id = new_yantra_box.id + '_text'
-    new_yantra_label.name = new_yantra_box.name + '_text'
-    new_yantra_label.value = 'Enter Yantra Name'
-    new_yantra_box.appendChild(new_yantra_label)
+    let new_row_label = document.createElement('input');
+    new_row_label.type = 'text'
+    new_row_label.id = new_row_box.id + '_text'
+    new_row_label.name = new_row_box.name + '_text'
+    new_row_label.value = 'Enter Yantra Name'
+    new_row_box.appendChild(new_row_label)
 
-    let new_yantra_amount = document.createElement('input');
-    new_yantra_amount.type = 'number'
-    new_yantra_amount.className = 'yantra bonus'
-    new_yantra_amount.id = new_yantra_box.id + '_amount'
-    new_yantra_amount.name = new_yantra_box.id + '_amount'
-    new_yantra_amount.min = '0'
-    new_yantra_amount.value = '0'
-    new_yantra_amount.addEventListener('change', update)
+    let new_row_amount = document.createElement('input');
+    new_row_amount.type = 'number'
+    new_row_amount.className = 'yantra bonus'
+    new_row_amount.id = new_row_box.id + '_amount'
+    new_row_amount.name = new_row_box.id + '_amount'
+    new_row_amount.min = '0'
+    new_row_amount.value = '0'
+    new_row_amount.addEventListener('change', update)
 
-    new_yantra_box.appendChild(new_yantra_amount)
+    new_row_box.appendChild(new_row_amount)
 
     let remove_button = document.createElement('button');
     remove_button.innerHTML = 'Remove'
 
-    new_yantra_box.appendChild(remove_button)
-    yantras_elm.appendChild(new_yantra_box)
-    new_yantra_box.addEventListener('submit', remove_yantra)
+    new_row_box.appendChild(remove_button)
+    form_elm.appendChild(new_row_box)
+    new_row_box.addEventListener('submit', remove_row)
 }
 
-function remove_yantra(event){
-    let warning = document.querySelector('.yantras.error');
-    warning.innerHTML = ''
+function remove_row(event){
     event.preventDefault();
     let selected = event.target
     selected.parentNode.removeChild(selected);
