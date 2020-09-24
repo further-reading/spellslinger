@@ -247,10 +247,14 @@ function calc_paradox(){
     let paradox
     let current_reach = calc_reach()
     let free_reach = Number(arcana_elm.value) - Number(level_elm.value) + 1
+    let warning = document.querySelector('.reach .warning')
     if (current_reach > free_reach){
         paradox = current_reach - free_reach
+        warning.innerHTML = 'You are overreaching!'
+
     }
     else {
+        warning.innerHTML = ''
         return 0
     }
 
@@ -269,7 +273,10 @@ function calc_paradox(){
 
 function calc_reach(){
     let reach = document.querySelectorAll('.reach:checked').length
-    reach += document.querySelectorAll('.reach.additional').length
+    let custom_reach = document.querySelectorAll('.reach.bonus')
+    for (let row of custom_reach){
+        reach += Number(row.value)
+    }
 
     let selected_duration = document.querySelector('#duration option:checked').value
     if (selected_duration === advanced_duration[advanced_duration.length -1 ]){
@@ -323,31 +330,32 @@ function add_yantra_clicked(){
 }
 
 function add_reach_clicked(){
-
-    // refactor add_yantra clicked to reduce wet code?
+    add_row('reach')
 }
 
 function add_row(type){
-    let form_elm = document.querySelector(`section.${type} form`);
+    let form_elm = document.querySelector(`section.${type} > form`);
     let last_row = document.querySelector(`.${type}:last-child`);
     let number = 0
     if (last_row){
-        number = '\d+'.exec(last_row.id) + 1
+        let pattern = new RegExp('\d+');
+        number = pattern.exec(last_row.id) + 1
     }
     let new_row_box = document.createElement('form');
     new_row_box.id = `${type}_${number}`
+    new_row_box.className = type
 
 
     let new_row_label = document.createElement('input');
     new_row_label.type = 'text'
     new_row_label.id = new_row_box.id + '_text'
-    new_row_label.name = new_row_box.name + '_text'
-    new_row_label.value = 'Enter Yantra Name'
+    new_row_label.name = new_row_box.id + '_text'
+    new_row_label.value = `Enter ${type} Name`
     new_row_box.appendChild(new_row_label)
 
     let new_row_amount = document.createElement('input');
     new_row_amount.type = 'number'
-    new_row_amount.className = 'yantra bonus'
+    new_row_amount.className = `${type} bonus`
     new_row_amount.id = new_row_box.id + '_amount'
     new_row_amount.name = new_row_box.id + '_amount'
     new_row_amount.min = '0'
