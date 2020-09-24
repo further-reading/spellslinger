@@ -61,20 +61,23 @@ function init() {
     add_yantra_button = document.querySelector('#add_yantra');
     add_reach_button = document.querySelector('#add_reach');
 
-    document.querySelectorAll('input').forEach(
+    document.querySelectorAll('input, select').forEach(
         item => {item.addEventListener('change', update);}
+        )
+    document.querySelectorAll('.factor').forEach(
+        item => {item.addEventListener('change', update_factors);}
         )
     document.querySelectorAll('.no_submit').forEach(
         item => {item.addEventListener('submit', form_handler);}
         )
     add_yantra_button.onclick = add_yantra_clicked
     add_reach_button.onclick = add_reach_clicked
+    update_factors()
     update()
 
 }
 
 function update(){
-    update_factors()
     update_yantra_warning()
     calc_pool()
 }
@@ -113,7 +116,7 @@ function calc_penalties(arcana){
     let penalties = 0
     for (let item of document.querySelectorAll('.penalty')){
         if (item.value){
-            penalties += Number(item.value)
+            penalties += Number(item.options[item.selectedIndex].value)
         }
     }
     let potency = Number(potency_elm.value)
@@ -304,7 +307,7 @@ function calc_mana(){
     let mana_section = document.querySelector('#mana');
     let mana_inputs = mana_section.querySelectorAll('input[type="number"]')
     mana_inputs.forEach(element => mana_spent += Number(element.value))
-    if (mana_section.querySelector('#out_path').checked) {
+    if (document.querySelector('#out_path').checked) {
         mana_spent += 1
     }
     return mana_spent
