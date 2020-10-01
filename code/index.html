@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="utils/script.js" type="module"></script>
     <title>Spellslinger</title>
 </head>
 <body>
@@ -9,66 +10,95 @@
         <h1>Enter Stats</h1>
         <form>
             <label for="gnosis">Gnosis Rating:</label>
-            <input type="text" id="gnosis" name="gnosis">
-            <label for="arcana">Primary Arcana:</label>
-            <input type="text" id="arcana" name="arcana">
-            <p class="stats error"></p>
+            <input type="number" id="gnosis" name="gnosis" class="pool factor" value="1" min="1"  max="10">
+            <label for="arcana">Primary Arcana Rating:</label>
+            <input type="number" id="arcana" name="arcana" class="pool factor" value="1" min="1" max="5">
+            <p>Base Pool: <strong class="base">2</strong></p>
+            <label for="current_paradox">Current Paradox:</label>
+            <input type="number" id="current_paradox" name="current_paradox" value="0" min="0">
         </form>
     </section>
     <section>
-        <h1>Enter Spell Details</h1>
-        <form>
-            <label for="sname">Name:</label>
-            <input type="text" id="sname" name="sname">
-            <label for="pfactor">Primary Factor:</label>
-            <input type="text" id="pfactor" name="pfactor">
-            <p class="sdetails error"></p>
-        </form>
+        <h1>Spell Details</h1>
+        <label for="level">Spell Level:</label>
+        <input type="number" id="level" name="level" value="1" min="1" max="5">
+        <label for="rote">Rote:</label>
+        <input type="checkbox" id="rote" name="rote">
+        <label for="pfactor">Primary Factor:</label>
+        <select id="pfactor" name="pfactor" class="factor">
+            <option value="potency">Potency</option>
+            <option value="duration">Duration</option>
+            <option value="scale">Scale</option>
+        </select>
+        <label for="out_path">Out of Path Arcana?</label>
+        <input type="checkbox" id="out_path" name="out_path">
     </section>
-    <section>
+    <section class="reach">
         <h1>Choose Reach</h1>
+        <p class="warning"></p>
         <form>
-            <label for="rname1">Name:</label>
-            <input type="text" id="rname1" name="rname1">
-            <label for="rvalue1">Value:</label>
-            <input type="text" id="rvalue1" name="rvalue1">
-            <!-- Button To add new yantra -->
-            <p class="reach error"></p>
+            <label for="actime">Advanced Casting Time:</label>
+            <input type="checkbox" id="actime" name="actime" class="factor reach">
+            <label for="arange">Advanced Range:</label>
+            <input type="checkbox" id="arange" name="arange" class="factor reach">
+            <label for="apotency">Advanced Potency:</label>
+            <input type="checkbox" id="apotency" name="apotency" class="factor reach">
+            <label for="ascale">Advanced Scale</label>
+            <input type="checkbox" id="ascale" name="ascale" class="factor reach">
+            <label for="aduration">Advanced Duration:</label>
+            <input type="checkbox" id="aduration" name="aduration" class="factor reach">
+            <button type="button" id="add_reach">Add Reach</button>
         </form>
     </section>
     <section>
-        <h1>Choose Spell Factors</h1>
+        <h1>Spell Factors</h1>
         <form>
             <label for="cast_time">Casting Time:</label>
-            <input type="text" id="cast_time" name="cast_time">
+            <input type="text" id="cast_time" name="cast_time" readonly>
 
             <label for="range">Range:</label>
-            <input type="text" id="range" name="range" value="Self/Touch">
+            <input type="text" id="range" name="range" readonly>
 
             <label for="potency">Potency:</label>
-            <input type="text" id="potency" name="potency">
+            <input type="number" id="potency" name="potency" min="0">
 
             <label for="duration">Duration:</label>
-            <input type="text" id="duration" name="duration">
+            <select id="duration" name="duration" class="penalty">
+            </select>
 
             <label for="scale">Scale:</label>
-            <input type="text" id="scale" name="scale">
-            <p class="factor error"></p>
+            <select id="scale" name="scale" class="penalty">
+            </select>
         </form>
     </section>
-    <section>
+    <section class="yantra">
         <h1>Choose Yantras</h1>
-        <form>
-            <label for="yname1">Name:</label>
-            <input type="text" id="yname1" name="yname1">
-            <label for="yvalue1">Value:</label>
-            <input type="text" id="yvalue1" name="yvalue1">
-            <!-- Button To add new yantra -->
+        <form class="no_submit">
+            <button id="add_yantra">Add Yantra</button>
             <p class="yantras error"></p>
+        </form>
+    </section>
+    <section id="mana">
+        <h1>Spend Mana</h1>
+        <form>
+            <label for="mparadox">Reduce paradox:</label>
+            <input type="number" id="mparadox" name="mparadox" min="0" value="0">
+            <label for="mextra">Additional Mana:</label>
+            <input type="number" id="mextra" name="mextra" min="0" value="0">
+            <p class="mwarning"></p>
         </form>
     </section>
     <section>
         <h1>Pool</h1>
+        <table>
+            <tr><th>Base:</th><td class="base"></td></tr>
+            <tr><th>Yantras:</th><td id="total_yantras"></td></tr>
+            <tr><th>Total:</th><td id="total"></td></tr>
+            <tr><th>Reach:</th><td id="total_reach"></td></tr>
+            <tr><th>Paradox:</th><td id="total_paradox"></td></tr>
+            <tr><th>Mana:</th><td id="total_mana"></td></tr>
+        </table>
+        <p id="output"></p>
     </section>
 </body>
 </html>
